@@ -1,3 +1,7 @@
+// NDS RESOLUTION
+const WIDTH = 256
+const HEIGHT = 192
+
 // SET UP KEYBOARD CONTROLS
 
 const UKEY = 'KeyW';
@@ -37,9 +41,11 @@ function ShaderLoader(vertex_url, fragment_url, onLoad, onProgress, onError) {
 
 // CONSTANTS FOR COLORS [sic].
 const COL_BLK = new THREE.Color(0x000000);
-const COL_NVY = new THREE.Color(0x800080);
+const COL_NVY = new THREE.Color(0x0f0022);
+const COL_PRP = new THREE.Color(0x800080);
+const COL_DYL = new THREE.Color(0x999966);
 const COL_YLW = new THREE.Color(0xeeee77);
-const COL_IVR = new THREE.Color(0xffffff);
+const COL_IVR = new THREE.Color(0xffffdd);
 
 // CONVERTS BLOCH SPHERE CO-ORDS TO X,Y,Z CO-ORDS
 function coords(theta, phi, r=1) {
@@ -57,20 +63,21 @@ function genesis(vert, frag) {
     var scene = new THREE.Scene();
     scene.background = new THREE.Color(COL_BLK);
     
-    var camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 1, 1000 );
+    var camera = new THREE.PerspectiveCamera(50, WIDTH/HEIGHT, 1, 1000 );
     
     // camera position, in bloch sphere co-ords
     var cp = new THREE.Vector3(0, Math.PI / 2, 5);
-     
+    var lp = new THREE.Vector3(0, Math.PI / 2, 1);
+    
     var renderer = new THREE.WebGLRenderer({});
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(WIDTH, HEIGHT);
     document.body.appendChild(renderer.domElement);
     
     // set up moon material
     const uniforms = {
         col_blck: {type: 'vec3', value: COL_BLK},
         col_shdw: {type: 'vec3', value: COL_NVY},
-        col_nrml: {type: 'vec3', value: COL_YLW},
+        col_nrml: {type: 'vec3', value: COL_DYL},
         col_lite: {type: 'vec3', value: COL_IVR},
         
 
@@ -85,11 +92,24 @@ function genesis(vert, frag) {
     });
     
     // set up moon geometry
-    const sphere = new THREE.IcosahedronGeometry(1,3);
+    var loader = new THREE.BufferGeometryLoader();
+    
+    loader.load('models/suzanne.json', function (geometry) {console.log("yoo2"), my_geometry = geometry}, function ( xhr ) {
+        console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+    },);
+    
+    const sphere = new THREE.IcosahedronGeometry(0.8,3);
+    const torus = new THREE.TorusGeometry(0.5, 0.3, 16, 100);
     
     // create moon mesh and add it to the scene
     var moon = new THREE.Mesh(sphere, material);
     scene.add(moon);
+    // create moon mesh and add it to the scene
+    var moon2 = new THREE.Mesh(torus, material);
+    scene.add(moon2);
+    
+    moon.position.y = -1;
+    moon2.position.y = 1;
     
     // timekeeping
     // keep track of time of last frame and time elapsed between frames
@@ -106,8 +126,10 @@ function genesis(vert, frag) {
         c = coords(cp.x, cp.y, cp.z);
         camera.position.set(c.x, c.y, c.z);
         
-        // update camera position (this is rotation around the moon)
-        cp.x = time/4000;
+        uniforms.ldir.value = coords(lp.x, lp.y, lp.z);
+        
+        // update light position (this is rotation around the moon)
+        lp.x = time/1256;
         
         // point camera at moon
         camera.lookAt(0,0,0);
