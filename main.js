@@ -129,7 +129,7 @@ function genesis(vert, frag) {
         uniforms.ldir.value = coords(lp.x, lp.y, lp.z);
         
         // update light position (this is rotation around the moon)
-        lp.x = time/1256;
+        lp.x = time/2512; //1256
         
         // point camera at moon
         camera.lookAt(0,0,0);
