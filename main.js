@@ -138,7 +138,7 @@ function genesis(vert, frag) {
         // update light position (this is rotation around the moon)
         lp.x = time/8000; //1256
         
-        moon3.rotation.x = time/2000;
+        moon3.rotation.x = time/1000;
         moon3.position.x = Math.sin(time/1000);
         moon3.position.z = Math.cos(time/1000);
         
