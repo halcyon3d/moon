@@ -101,7 +101,7 @@ function genesis(vert, frag) {
     const sphere = new THREE.IcosahedronGeometry(0.8,3);
     const torus = new THREE.TorusGeometry(0.5, 0.3, 16, 100);
     
-    const cooltorus = new THREE.TorusKnotGeometry(1, 0.3, 48, 16);
+    const cooltorus = new THREE.TorusKnotGeometry(0.3, 0.09, 48, 16);
     
     // create moon mesh and add it to the scene
     var moon = new THREE.Mesh(sphere, material);
