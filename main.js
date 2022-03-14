@@ -136,7 +136,7 @@ function genesis(vert, frag) {
         uniforms.ldir.value = coords(lp.x, lp.y, lp.z);
         
         // update light position (this is rotation around the moon)
-        lp.x = time/8000; //1256
+        lp.x = time/6000; //1256
         
         moon3.rotation.x = time/1000;
         moon3.position.x = Math.sin(time/1000);
