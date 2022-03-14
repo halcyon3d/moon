@@ -139,7 +139,7 @@ function genesis(vert, frag) {
         lp.x = time/8000; //1256
         
         moon3.rotation.x = time/1000;
-        moon3.position.x = MATH.sin(time);
+        moon3.position.x = Math.sin(time);
         
         
         // point camera at moon
